@@ -14,8 +14,8 @@ node {
         withCredentials([
             [$class: "FileBinding", credentialsId: 'play-store-svc-acc', variable: 'PLAY_STORE_SVC_ACC'],
         ]){
-            sh "cp appsettings.json appsettings.local.json && chmod 755 appsettings.local.json"
-            sh "cp ${PLAY_STORE_SVC_ACC} play-store-service-account.json && chmod 755 play-store-service-account.json"
+            sh "sudo cp appsettings.json appsettings.local.json && sudo chmod 755 appsettings.local.json"
+            sh "sudo cp ${PLAY_STORE_SVC_ACC} play-store-service-account.json && sudo chmod 755 play-store-service-account.json"
             app = docker.build("flutter:demo", "-f DockerfileProd .")
         }
 
