@@ -4,7 +4,12 @@ platform :android do
 
   desc "Deploy to Play Store"
   lane :deploy do
-    
+    upload_to_play_store(
+      release_status: 'completed',
+      track: 'beta',
+      json_key: '../play-store-service-account.json',
+      aab: '../build/app/outputs/bundle/release/app-release.aab'
+    )
   end
-  
+
 end
