@@ -14,7 +14,7 @@ node {
         withCredentials([
             [$class: "FileBinding", credentialsId: 'play-store-svc-acc', variable: 'PLAY_STORE_SVC_ACC'],
         ]){
-            app = docker.build("flutter:demo")
+            app = docker.build("flutter:demo", "-f DockerfileProd .")
         }
 
         echo "App Bundle uploaded to Play Store"
