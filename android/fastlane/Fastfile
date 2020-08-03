@@ -2,43 +2,9 @@ default_platform(:android)
 
 platform :android do
 
-  root_directory = ""
-  build_name = "0.0.1"
-  build_number = 1
-  release_file_path = ""
-  apk_output_path = ""
-  appsettings_local_path = nil
-
-  before_all do |lane, options|
-    root_directory = File.expand_path("../..", Dir.pwd)
-    build_name = ENV["BUILD_NAME"]
-    build_number = ENV["BUILD_NUMBER"]
-    apk_output_path = ENV["APK_OUTPUT_PATH"]
-    appsettings_local_path = ENV["APPSETTINGS_LOCAL_PATH"]
-    release_file_path = File.expand_path("../../build/app/outputs/apk/release/app-release.apk", Dir.pwd)
-  end
-
-  desc "Clean"
-  lane :clean do
-    sh "cd #{root_directory} && flutter clean"
-  end
-
-  desc "Build"
-  lane :build do
-    puts "Version: #{build_name}+#{build_number}"
-    puts "APK Output Path: #{apk_output_path}"
-
-    if !appsettings_local_path.nil?
-      puts "appsettings.local.json will be replaced by #{appsettings_local_path}"
-      sh "cp #{appsettings_local_path} #{root_directory}/appsettings.local.json" 
-    end
-    
-    sh "cd #{root_directory} && flutter build apk -t lib/program.dart --release --build-name=#{build_name} --build-number=#{build_number}"
-    sh "cp #{release_file_path} #{apk_output_path}"
-  end
-
   desc "Deploy to Play Store"
   lane :deploy do
-    # TODO: Deploy to Play Store
+    
   end
+  
 end

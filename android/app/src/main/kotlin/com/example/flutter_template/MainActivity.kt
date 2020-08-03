@@ -1,4 +1,4 @@
-package com.example.flutter_template
+package com.clkw.flutter_template
 
 import androidx.annotation.NonNull;
 import io.flutter.embedding.android.FlutterActivity

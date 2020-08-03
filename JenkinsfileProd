@@ -14,6 +14,8 @@ node {
         withCredentials([
             [$class: "FileBinding", credentialsId: 'play-store-svc-acc', variable: 'PLAY_STORE_SVC_ACC'],
         ]){
+            sh "cp appsettings.json appsettings.local.json"
+            sh "cp ${PLAY_STORE_SVC_ACC} play-store-service-account.json"
             app = docker.build("flutter:demo", "-f DockerfileProd .")
         }
 
