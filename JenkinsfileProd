@@ -1,49 +1,42 @@
-node {
-    properties(
-        [
-            disableConcurrentBuilds()
-        ]
-    )
-
-    stage('Clone repository'){
-        def userInput = input {
-            id: 'userInput',
-            message: 'Enter path of test reports:?',
-            parameters {
-                string(name: 'TAG', defaultValue: 'v0.0', description: 'Tag to release')
-            }
-        }
-        checkout scm: [
-            $class: 'GitSCM', 
-            userRemoteConfigs: [[url: repoURL, credentialsId: credential]], 
-            branches: [[name: userInput.TAG]]
-        ],
-        poll: false
+pipeline {
+    agent any
+    parameters {
+        string(name: 'TAG', defaultValue: 'v0.0', description: 'Tag Name')
     }
-
-    stage('Build and Upload App Bundle to Play Store'){
-        withCredentials([
-            [$class: "FileBinding", credentialsId: 'play-store-svc-acc', variable: 'PLAY_STORE_SVC_ACC'],
-            [$class: "FileBinding", credentialsId: 'flutter-demo-prod-keystore', variable: 'KEYSTORE'],
-            [$class: "FileBinding", credentialsId: 'flutter-demo-prod-key-properties', variable: 'KEY_PROPERTIES'],
-        ]){
-            sh "sudo cp appsettings.json appsettings.local.json && sudo chmod 755 appsettings.local.json"
-            sh "sudo cp ${KEYSTORE} keystore.jks && sudo chmod 755 keystore.jks"
-            sh "sudo cp ${KEY_PROPERTIES} android/key.properties && sudo chmod 755 android/key.properties"
-            sh "sudo cp ${PLAY_STORE_SVC_ACC} play-store-service-account.json && sudo chmod 755 play-store-service-account.json"
-            def app = docker.build("flutter:demo", "--rm -f DockerfileProd .")
-            app.inside('-v $WORKSPACE:/output -u root') {
-                sh """
-                cp /app/build/app/outputs/bundle/release/app-release.aab /output
-                """
-            }
-            archiveArtifacts artifacts: 'app-release.aab'
+    stages {
+        stage('Clone repository'){
+            checkout scm: [
+                $class: 'GitSCM', 
+                userRemoteConfigs: [[url: repoURL, credentialsId: credential]], 
+                branches: [[name: ${params.TAG}]]
+            ],
+            poll: false
         }
 
-        echo "App Bundle uploaded to Play Store"
-    }
+        stage('Build and Upload App Bundle to Play Store'){
+            withCredentials([
+                [$class: "FileBinding", credentialsId: 'play-store-svc-acc', variable: 'PLAY_STORE_SVC_ACC'],
+                [$class: "FileBinding", credentialsId: 'flutter-demo-prod-keystore', variable: 'KEYSTORE'],
+                [$class: "FileBinding", credentialsId: 'flutter-demo-prod-key-properties', variable: 'KEY_PROPERTIES'],
+            ]){
+                sh "sudo cp appsettings.json appsettings.local.json && sudo chmod 755 appsettings.local.json"
+                sh "sudo cp ${KEYSTORE} keystore.jks && sudo chmod 755 keystore.jks"
+                sh "sudo cp ${KEY_PROPERTIES} android/key.properties && sudo chmod 755 android/key.properties"
+                sh "sudo cp ${PLAY_STORE_SVC_ACC} play-store-service-account.json && sudo chmod 755 play-store-service-account.json"
+                def app = docker.build("flutter:demo", "--rm -f DockerfileProd .")
+                app.inside('-v $WORKSPACE:/output -u root') {
+                    sh """
+                    cp /app/build/app/outputs/bundle/release/app-release.aab /output
+                    """
+                }
+                archiveArtifacts artifacts: 'app-release.aab'
+            }
 
-    stage('Completed'){
-        echo "Completed"
+            echo "App Bundle uploaded to Play Store"
+        }
+
+        stage('Completed'){
+            echo "Completed"
+        }
     }
 }
