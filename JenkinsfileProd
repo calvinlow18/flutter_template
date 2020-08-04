@@ -1,17 +1,9 @@
 pipeline {
     agent any
-    parameters {
-        string(name: 'TAG', defaultValue: 'v0.0', description: 'Tag Name')
-    }
     stages {
         stage('Clone repository'){
             steps {
-                checkout scm: [
-                    $class: 'GitSCM', 
-                    userRemoteConfigs: [[url: repoURL, credentialsId: credential]], 
-                    branches: [[name: ${params.TAG}]]
-                ],
-                poll: false
+                checkout scm
             }
             
         }
