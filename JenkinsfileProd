@@ -7,7 +7,19 @@ node {
     )
 
     stage('Clone repository'){
-        checkout scm
+        def userInput = input {
+            id: 'userInput',
+            message: 'Enter path of test reports:?',
+            parameters {
+                string(name: 'TAG', defaultValue: 'v0.0', description: 'Tag to release')
+            }
+        }
+        checkout scm: [
+            $class: 'GitSCM', 
+            userRemoteConfigs: [[url: repoURL, credentialsId: credential]], 
+            branches: [[name: userInput.TAG]]
+        ],
+        poll: false
     }
 
     stage('Build and Upload App Bundle to Play Store'){
