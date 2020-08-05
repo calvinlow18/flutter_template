@@ -3,7 +3,7 @@ FROM cirrusci/flutter:1.17.5 AS builder
 WORKDIR /app
 COPY . .
 USER root
-RUN flutter build appbundle -t lib/program.dart
+RUN flutter build appbundle --flavor prod -t lib/program.dart
 
 FROM ruby:2.7.1 AS fastlane
 

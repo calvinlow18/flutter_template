@@ -16,16 +16,6 @@ or alternatively using `brew cask install fastlane`
 
 # Available Actions
 ## Android
-### android clean
-```
-fastlane android clean
-```
-Clean
-### android build
-```
-fastlane android build
-```
-Build
 ### android deploy
 ```
 fastlane android deploy

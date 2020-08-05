@@ -22,10 +22,10 @@ node {
             def app = docker.build("flutter:demo", "--rm -f DockerfileProd .")
             app.inside('-v $WORKSPACE:/output -u root') {
                 sh """
-                cp /app/build/app/outputs/bundle/release/app-release.aab /output
+                cp /app/build/app/outputs/bundle/prodRelease/app-prod-release.aab /output
                 """
             }
-            archiveArtifacts artifacts: 'app-release.aab'
+            archiveArtifacts artifacts: 'app-prod-release.aab'
         }
 
         echo "App Bundle (${env.BRANCH_NAME}) uploaded to Play Store"
