@@ -1,7 +1,6 @@
 node {
     properties(
         [
-            pipelineTriggers([pollSCM('H/2 * * * *')]),
             disableConcurrentBuilds()
         ]
     )
@@ -29,7 +28,7 @@ node {
             archiveArtifacts artifacts: 'app-release.aab'
         }
 
-        echo "App Bundle uploaded to Play Store"
+        echo "App Bundle (${env.BRANCH_NAME}) uploaded to Play Store"
     }
 
     stage('Completed'){
