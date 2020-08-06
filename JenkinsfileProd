@@ -36,8 +36,8 @@ node {
     } catch (e) {
         throw e
     } finally {
-        sh "sudo docker image prune -a --filter=label=stage=flutter-builder"
-        sh "sudo docker image prune -a --filter=label=stage=flutter-deployer"
+        sh "sudo docker image prune -a -f --filter=label=stage=flutter-builder"
+        sh "sudo docker image prune -a -f --filter=label=stage=flutter-deployer"
     }
 
     stage('Completed'){
