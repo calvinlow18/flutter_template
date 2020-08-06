@@ -36,11 +36,15 @@ node {
     } catch (e) {
         throw e
     } finally {
-        sh "sudo docker image prune -a -f --filter=label=stage=flutter-builder"
-        sh "sudo docker image prune -a -f --filter=label=stage=flutter-deployer"
+        cleanUpDockerImage()
     }
 
     stage('Completed'){
         echo "Completed"
     }
+}
+
+def cleanUpDockerImage() {
+    sh "sudo docker image prune -a -f --filter=label=stage=flutter-builder"
+    sh "sudo docker image prune -a -f --filter=label=stage=flutter-deployer"
 }
