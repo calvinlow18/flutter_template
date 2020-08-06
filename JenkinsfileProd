@@ -19,14 +19,13 @@ node {
             sh "sudo cp ${KEYSTORE} keystore.jks && sudo chmod 755 keystore.jks"
             sh "sudo cp ${KEY_PROPERTIES} android/key.properties && sudo chmod 755 android/key.properties"
             sh "sudo cp ${PLAY_STORE_SVC_ACC} play-store-service-account.json && sudo chmod 755 play-store-service-account.json"
-            def app = docker.build("flutter:demo", "--rm -f DockerfileProd .")
+            def app = docker.build("flutter:demo", "--force-rm --rm -f DockerfileProd .")
             app.inside('-v $WORKSPACE:/output -u root') {
                 sh """
                 cp /app/build/app/outputs/bundle/prodRelease/app-prod-release.aab /output
                 """
             }
             archiveArtifacts artifacts: 'app-prod-release.aab'
-            sh "sudo docker image prune --filter label=stage=flutter-builder --filter label=stage=flutter-deployer"
         }
 
         echo "App Bundle (${env.BRANCH_NAME}) uploaded to Play Store"
