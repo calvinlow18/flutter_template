@@ -26,6 +26,7 @@ node {
                 """
             }
             archiveArtifacts artifacts: 'app-release.aab'
+            sh "sudo docker image prune --filter label=stage=flutter-builder --filter label=stage=flutter-deployer"
         }
 
         echo "App Bundle (${env.BRANCH_NAME}) uploaded to Play Store"
