@@ -26,5 +26,5 @@ WORKDIR /app/android
 RUN apt-get update && apt-get -y install sudo
 RUN curl -sL https://firebase.tools | bash
 RUN bundle install
-RUN GOOGLE_APPLICATION_CREDENTIALS=/app/firebasekeyfile.json && \
+RUN export GOOGLE_APPLICATION_CREDENTIALS=/app/firebasekeyfile.json && \
     bundle exec fastlane deployFirebase
