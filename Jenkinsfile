@@ -30,7 +30,7 @@ node {
                 sh "sudo cp ${KEYSTORE} keystore.jks && sudo chmod 755 keystore.jks"
                 sh "sudo cp ${KEY_PROPERTIES} android/key.properties && sudo chmod 755 android/key.properties"
                 // sh "sudo cp ${GOOGLE_SERVICES} android/app/src/${FLAVOR}/google-services.json && sudo chmod 755 android/app/src/${FLAVOR}/google-services.json"
-                def app = docker.build("flutter:demo", "--force-rm --rm -f Dockerfile .")
+                def app = docker.build("flutter:demo", "--build-arg FLAVOR=${FLAVOR} --build-arg FIB_APP_ID=${FIB_APP_ID} --build-arg FIB_TESTER_GROUPS=${FIB_TESTER_GROUPS} --force-rm --rm -f Dockerfile .")
                 app.inside('-v $WORKSPACE:/output -u root') {
                     sh """
                     cp /app/build/app/outputs/apk/sit/release/app-sit-release.apk /output
