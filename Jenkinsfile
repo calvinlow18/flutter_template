@@ -13,13 +13,13 @@ node {
 
         stage('SIT Configuration'){
             FLAVOR = 'sit'
-            FIB_APP_ID = '1:456849227714:android:3af82e169421840844e05b'
+            FIB_APP_ID = '1:777553480062:android:6b25559ebf36523eaf0b2f'
             FIB_TESTER_GROUPS = 'required'
         }
 
         stage('Build and Upload SIT'){
             withCredentials([
-                [$class: "FileBinding", credentialsId: 'flutter-demo-sit-app-settings', variable: 'FIREBASE_KEY_FILE'],
+                [$class: "FileBinding", credentialsId: 'flutter-demo-sit-firebase-key', variable: 'FIREBASE_KEY_FILE'],
                 [$class: "FileBinding", credentialsId: 'flutter-demo-sit-app-settings', variable: 'APP_SETTINGS_LOCAL'],
                 [$class: "FileBinding", credentialsId: 'flutter-demo-sit-keystore', variable: 'KEYSTORE'],
                 [$class: "FileBinding", credentialsId: 'flutter-demo-sit-key-properties', variable: 'KEY_PROPERTIES'],
