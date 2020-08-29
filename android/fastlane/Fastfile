@@ -2,6 +2,26 @@ default_platform(:android)
 
 platform :android do
 
+  desc "Deploy to Firebase App Distribution"
+  lane :deployFirebase do
+    fib_app_id = ENV["FIB_APP_ID"]
+    fib_tester_groups = ENV["FIB_TESTER_GROUPS"]
+    version_info = flutter_version(
+      pubspec_location: "../pubspec.yaml",
+    )
+    version_code = version_info["version_code"]
+    begin
+      release_notes = File.read("metadata/android/en-US/changelogs/" + version_code + ".txt")
+    rescue
+      release_notes = File.read("metadata/android/en-US/changelogs/default.txt")
+    end
+    firebase_app_distribution(
+        app: fib_app_id,
+        groups: fib_tester_groups,
+        release_notes: release_notes,
+    )
+  end
+
   desc "Deploy to Play Store"
   lane :deploy do
     upload_to_play_store(

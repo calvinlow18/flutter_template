@@ -16,6 +16,11 @@ or alternatively using `brew cask install fastlane`
 
 # Available Actions
 ## Android
+### android deployFirebase
+```
+fastlane android deployFirebase
+```
+Deploy to Firebase App Distribution
 ### android deploy
 ```
 fastlane android deploy
