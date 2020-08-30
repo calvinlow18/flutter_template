@@ -19,12 +19,14 @@ node {
 
         stage('Build and Upload SIT'){
             withCredentials([
+                [$class: "FileBinding", credentialsId: 'giant-rnd-gcr', variable: 'KEY_FILE'],
                 [$class: "FileBinding", credentialsId: 'flutter-demo-sit-firebase-key', variable: 'FIREBASE_KEY_FILE'],
                 [$class: "FileBinding", credentialsId: 'flutter-demo-sit-app-settings', variable: 'APP_SETTINGS_LOCAL'],
                 [$class: "FileBinding", credentialsId: 'flutter-demo-sit-keystore', variable: 'KEYSTORE'],
                 [$class: "FileBinding", credentialsId: 'flutter-demo-sit-key-properties', variable: 'KEY_PROPERTIES'],
                 // [$class: "FileBinding", credentialsId: 'flutter-demo-sit-google-services', variable: 'GOOGLE_SERVICES'],
             ]){
+                sh "sudo cp ${KEY_FILE} keyfile.json && sudo chmod 755 keyfile.json"
                 sh "sudo cp appsettings.json appsettings.local.json && sudo chmod 755 appsettings.local.json"
                 sh "sudo cp ${FIREBASE_KEY_FILE} firebasekeyfile.json && sudo chmod 755 firebasekeyfile.json"
                 sh "sudo cp ${KEYSTORE} keystore.jks && sudo chmod 755 keystore.jks"

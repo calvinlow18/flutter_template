@@ -4,21 +4,36 @@ platform :android do
 
   desc "Deploy to Firebase App Distribution"
   lane :deployFirebase do
+    flavor = ENV["FLAVOR"]
     fib_app_id = ENV["FIB_APP_ID"]
     fib_tester_groups = ENV["FIB_TESTER_GROUPS"]
+    puts flavor
+    puts fib_app_id
+    puts fib_tester_groups
     version_info = flutter_version(
       pubspec_location: "../pubspec.yaml",
     )
+    full_version = version_info["version_name"] + "+" + version_info["version_code"]
     version_code = version_info["version_code"]
     begin
       release_notes = File.read("metadata/android/en-US/changelogs/" + version_code + ".txt")
     rescue
       release_notes = File.read("metadata/android/en-US/changelogs/default.txt")
     end
+
+    google_cloud_storage_upload(
+      project: "miscellaneous-project",
+      keyfile: "../keyfile.json",
+      bucket: "public-gcs",
+      content_path: "../build/app/outputs/apk/" + flavor + "/release/app-" + flavor + "-release.apk",
+      name: full_version + ".apk"
+    )
+
     firebase_app_distribution(
         app: fib_app_id,
         groups: fib_tester_groups,
         release_notes: release_notes,
+        apk_path: "../build/app/outputs/apk/" + flavor + "/release/app-" + flavor + "-release.apk"
     )
   end
 
