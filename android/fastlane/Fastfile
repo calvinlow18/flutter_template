@@ -1,7 +1,7 @@
 default_platform(:android)
 
 platform :android do
-
+  
   desc "Deploy to Firebase App Distribution"
   lane :deployFirebase do
     flavor = ENV["FLAVOR"]
@@ -29,12 +29,12 @@ platform :android do
       name: full_version + ".apk"
     )
 
-    firebase_app_distribution(
-        app: fib_app_id,
-        groups: fib_tester_groups,
-        release_notes: release_notes,
-        apk_path: "../build/app/outputs/apk/" + flavor + "/release/app-" + flavor + "-release.apk"
-    )
+    # firebase_app_distribution(
+    #     app: '1:777553480062:android:6b25559ebf36523eaf0b2f',
+    #     groups: fib_tester_groups,
+    #     release_notes: release_notes,
+    #     apk_path: "../build/app/outputs/apk/" + flavor + "/release/app-" + flavor + "-release.apk"
+    # )
   end
 
   desc "Deploy to Play Store"
